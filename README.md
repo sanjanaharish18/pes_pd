@@ -11,11 +11,11 @@ How computers work
 * It represents a compact computing chip responsible for executing instructions and managing the operations of your electronic project.
 * The functionality of Arduino boards revolves around enabling you to create and upload code that dictates how the microcontroller on the board behaves.
 
-![image](https://github.com/shreyakotagal/pes_pd/assets/117657204/74ac0bd8-41ad-425a-9b16-9b66bfe2271e)
+![image](https://github.com/sanjanaharish18/pes_pd/blob/main/day1img1.png)
 
 The arduino can be designed as board like:
 
-![image](https://github.com/shreyakotagal/pes_pd/assets/117657204/2f2197ba-eebc-4025-941d-22e4a893e033)
+![image](https://github.com/sanjanaharish18/pes_pd/blob/main/day1img2.png)
 
 * When we examine the IC, it resembles an image referred to as a "chip," although it's technically known as a "PACKAGE."
 * These packages are assigned names, such as "QFN-48," and there are various package types available with different configurations.
@@ -33,7 +33,7 @@ The arduino can be designed as board like:
 * "Foundry" is a pivotal term in chip design, as it refers to the place where chips are manufactured. Foundries encompass machines used in chip production.
 * The digital blocks situated within the SoC and the SPI interface are commonly termed "Macros."
 
-![image](https://github.com/shreyakotagal/pes_pd/assets/117657204/7b63d0f5-53be-404d-8ad6-4b8bb52c661f)
+![image](https://github.com/sanjanaharish18/pes_pd/blob/main/day1img3.png)
 
 **Introduction to RISC-V**
 
@@ -76,7 +76,7 @@ RTL-GDS Flow:
 * RTL: RTL serves as an abstraction level in the design process that represents the behavior of a digital circuit in terms of registers and the operations that transfer data between them.
 * Hardware: Hardware refers to the physical components of a computer system or any electronic device. It encompasses all the tangible parts that make up a computing or electronic device and enable it to perform various tasks.
 
-![image](https://github.com/shreyakotagal/pes_pd/assets/117657204/43c4f8e8-d9b4-4d65-9285-64f5068b7b7a)
+![image](https://github.com/sanjanaharish18/pes_pd/blob/main/day1img4.png)
 
 </details>
 <details>
@@ -143,7 +143,7 @@ The simplified RTL to GDS2 flow is a sequence of major implementation steps for 
   * Timing verification includes Static Timing Analysis (STA) to ensure that all timing constraints are met, and the circuit operates at the designated clock frequency.
 This simplified RTL to GDS2 flow is a fundamental process for designing ASICs, ensuring that the design is correctly synthesized, placed, routed, and verified before fabrication.
 
-![image](https://github.com/shreyakotagal/pes_pd/assets/117657204/c3ccad88-3f26-4899-966c-da72a11a924d)
+![image](https://github.com/sanjanaharish18/pes_pd/blob/main/day1img5.png)
 
 **Introduction to OpenLANE and Strive Chipsets**
 What is OpenLANE?
