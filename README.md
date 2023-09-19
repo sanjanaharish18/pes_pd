@@ -200,3 +200,190 @@ Skywater-130 PDK and OpenLane Project
 * One essential early task is to calculate the flop ratio, which is the ratio of the number of D flip-flops to the total number of cells.
 
 </details>
+
+## Day 2
+### Good floorplan vs bad floorplan and introduction to library cells
+<details>
+<summary> Chip Floor planning considerations </summary>
+  
+**Floor Planning Considerations**
+* When designing integrated circuits, floor planning is a critical step that involves defining the layout and placement of various components.
+* Here are some key considerations and steps in the floor planning process.
+
+1. Define Width and Height of Core and Die
+- The "die" refers to the entire semiconductor chip, including the core, I/O pads, and additional features.
+- The "core" is the central area of the chip where most of the active circuitry resides, such as CPU, GPU, memory, and logic components.
+
+2. Utilization Factor
+- Utilization factor is a crucial metric in floor planning.
+- It measures the ratio of the area occupied by the actual components to the total available area.
+- High utilization factors indicate efficient space usage.
+![image](https://github.com/sanjanaharish18/pes_pd/blob/main/day2imgfirst.png)
+
+![image](https://github.com/sanjanaharish18/pes_pd/blob/main/day2imgsecond.png)
+
+3. Location of Pre-Placed Cells
+- Pre-placed cells are specific blocks or cells (e.g., memories, clock gating cells) manually placed by the designer before automated placement tools are used.
+- These cells have predetermined locations to optimize placement.
+
+4. De-coupling Capacitors
+- De-coupling capacitors are essential in large circuits to mitigate voltage drops and noise.
+- They store and discharge electrical energy quickly to filter high-frequency noise and transient voltage fluctuations.
+
+5. Power Planning
+- Proper power planning lowers noise in digital circuits caused by voltage droop and ground bounce.
+- Robust power distribution networks (PDN) with numerous power strap taps are necessary to reduce resistance in the PDN.
+
+6. Pin Placement
+- Pin placement optimization minimizes buffering and enhances power consumption and timing.
+- HDL netlists are used to determine where specific pins should be placed.
+- Common pins are connected efficiently.
+
+Steps to Run Floorplan using OpenLANE
+1. Run floor planning in OpenLANE using the command: `run_floorplan`
+2. Navigate to the directory: `` ../openlane/designs/picorv32a/runs/11-09_17-53/results/floorplan``
+3. Use the command: `` magic -T /home/vsduser/Desktop/work/tools/openlane_working_dir/pdks/sky130A/libs.tech/magic/sky130A.tech lef read ../../tmp/merged.lef def read picorv32a.floorplan.def ``
+
+[Insert Screenshots of Running OpenLANE and Floorplan]
+
+Layout
+- Include images showcasing the overall layout and zoomed-in views.
+
+[Insert Layout Images Here]
+
+Standard Cells
+- Display images of standard cells used in the design.
+
+[Insert Standard Cells Image Here]
+
+</details>
+<details> 
+<summary> Library Binding and Placement </summary>
+  
+1. Bind the netlist with physical cells
+Library consists of cells, sizes of cells, various flavours and shapes of the cells, Timing, Power and delay information.
+Now, we have the floorplan, netlist and representation of components of netlist in library
+place all the components such that the timing is not disturbed and distribute them properly.
+2. Optimize Placement
+Some components may be located very far to their inputs which can disturb signal integrity (as wire length increases, RC value increases). Therefore we use repeaters(may be series of buffers) inorder to avoid signal loss but area loss comes into picture.
+Assuming that all the clock signals are working at ideal rate, we do the timing analysis if the current placement works good.
+3. Placement
+`run_placement`
+
+![image](https://github.com/sanjanaharish18/pes_pd/blob/main/day2img1.png)
+
+</details>
+<details>
+<summary> Cell design and characterization flows </summary>
+
+Inputs for cell design flow
+
+Cell design flow refers to the process of creating and optimizing individual digital logic cells that are part of a standard cell library. These libraries contain a set of pre-designed, characterized, and reusable logic gates, flip-flops, and other basic building blocks used in the design of integrated circuits. These libraries include PDK, DRC and LVS rules, SPICE models, libraries, user-defined specifications. User derfined specifications like Pin location, drawn gate lenght are added to the libarary by the library developer.
+
+Circuit Design
+
+Circuit design:Implment function using nmos and pmos and then derive the network graph. Derive the Euler's path and stick diagram from the graph.
+
+Layout design Convert stick diagram according to the DRC rules Extraction of parasitics,extracted spice list
+
+Characterization timing ,noise power.libs functions Read in the models and tech files and generate extracted spice Netlist. Read the subcircuits and attach power sources. Apply stimulus to characterization setup, provide neccesary output capacitance loads and provide neccesary simulation commands.
+
+</details>
+<details>
+<summary> General Timing Characterization Parameters </summary>
+
+Timing Threshold Definitions
+In digital circuit design, timing thresholds are critical parameters used to measure signal characteristics and performance. Here are some key timing threshold definitions:
+* **slew_low_rise_thr:** The threshold is set at 20% from the bottom power supply voltage when the signal is rising.
+* **slew_high_rise_thr:** The threshold is set at 20% from the top power supply voltage when the signal is rising.
+* **slew_low_fall_thr:** The threshold is set at 20% from the bottom power supply voltage when the signal is falling.
+* **slew_high_fall_thr:** The threshold is set at 20% from the top power supply voltage when the signal is falling.
+* **in_rise_thr:** Represents the 50% point on the rising edge of the input signal.
+* **in_fall_thr:** Represents the 50% point on the falling edge of the input signal.
+* **out_rise_thr:** Represents the 50% point on the rising edge of the output signal.
+* **out_fall_thr:** Represents the 50% point on the falling edge of the output signal.
+These parameters play a crucial role in calculating factors such as propagation delay and transition time, which are essential for assessing signal behavior and performance in digital circuits.
+* **Propagation Delay:** Propagation delay is calculated as the time difference between the output threshold (out_thr) and the input threshold (in_thr).
+  * Propagation delay=time(out_fall_thr)-time(in_rise_thr)
+* **Transition Time:** Transition time is calculated as the time difference between the high slew rate threshold (slew_high_rise_thr) and the low slew rate threshold (slew_low_rise_thr). It measures how long it takes for a signal to transition between logic levels during its rise.
+  * Rise transition time = time(slew_high_rise_thr) - time (slew_low_rise_thr)
+These timing thresholds and calculations are fundamental in ensuring that digital circuits meet their specified performance criteria and timing constraints.
+
+</details>
+
+## DAY 3
+###  Design library cell using Magic Layout and ngspice characterization
+<details>
+<summary> Labs for CMOS inverter ngspice simulations  </summary>
+  
+**IO Placer Revision**
+
+`` set ::env(FP_IO_MODE) 2 ``
+The following command can be typed to change the I/O pins placemnt configuration.
+
+**Inception of Layout and CMOS Fabrication Process**
+SPICE Deck Creation for CMOS Inverter
+* SPICE Deck is a netlist that has information on:
+   * component connectivity
+   * component values
+   * identifying the nodes
+   * giving a designation to the nodes
+SPICE Simulation and Switching Threshold
+![image](https://github.com/sanjanaharish18/pes_pd/blob/main/day3img1.png)
+
+**Git Clone and labwork**
+
+* Perform a git clone here from a repository that we require, to do the future labs.
+* Type the following command git clone https://github.com/nickson-jose/vsdstdcelldesign.git
+* Copy the 'sky130A.tech' file into the directory we just cloned by using
+cp sky130A.tech /home/vsduser/Desktop/work/tools/openlane_working_dir/openlane/vsdstdcelldesign look at the picture for the directory
+[insert image]
+
+**16 Mask CMOS Process**
+* Selecting a Substrate - Selecting the appropriate substrate to synthsize the design on.
+* Creating active reagion for transistors - Adding layers of SiO2(40nm), Si3N4(80nm) and photoresist(1um). On top of the photoresist we put a mask layer. Pass UV light and remove the mask. Resist is removed. LOCOS(Local Oxidation of Silicon) is performed. Si3N4 is etched.
+* N-Well and P-Well formation - The next masks are used to create the source and drain regions of the MOSFETs. Boron is used to make P-Well using ion implantation. Phosphorus is used to create N-Well. Put the MOSFET in a Drive In furnace.
+* Formation of Gate - Gate formation involves depositing a gate oxide, defining gate patterns using photolithography, depositing gate material, etching to create gates, doping the substrate and insulating the gates.
+* Lightly Doped Drain Formation(LDD) - Lightly doped drain (LDD) formation involves implanting the drain and source regions of a MOSFET transistor with a lighter concentration of dopants to reduce hot electron effect and short channel effect and enhance device performance.
+* Source and Drain Formation - Source and drain formation in a MOSFET transistor typically involves doping the silicon substrate with chemicals such as arsenic or phosphorous for n-type regions (source and drain) and boron for p-type regions (source and drain). High temperature annealing is performed.
+* Steps to form Contacts and Interconnects(local) - Titanium is deposited with a process known as sputtering. Wafer is heated to about 650 - 700 C in an N2 ambient furnace for 60 seconds. TiSi2 contacts are formed. TiN is also formed used for local communication. TiN is etched using RCA cleaning.
+* Higher Level Metal Formation - Forming contacts and interconnects locally involves depositing a dielectric material like silicon dioxide, patterning it using photolithography, etching contact holes, depositing a barrier metal (e.g., titanium or titanium nitride), filling with a conductor (e.g., aluminum or copper) using chemical vapor deposition (CVD), and then planarizing through chemical-mechanical polishing (CMP).
+
+**Sky130 Basic Layers Layout and LEF using Inverter**
+
+To look at layout of a CMOS inverter type the command magic -T sky130A.tech sky130_inv.mag &
+
+[insert image] 
+
+To look at the layout, choose and format use the letters s, v and z. To select a region right click with the mouse on the region to be selected. Triple s will show the connections to the particular choosen section.
+'what' is used in the tkcon to get to know what is present in the selected area.
+
+Steps to Create Standard Cell Layout and Extract Spice Netlist
+* DRC errors can be viewed in the tkcon.
+* To extract Spice Netlist:
+ext2spice cthresh 0 rthresh 0 (this does not create anything)
+ext2spice
+
+[insert image] 
+* sky130_inv.spice file is created
+**Sky130 Tech File Labs**
+Create Final SPICE Deck
+
+* Open the spice file using the command gedit sky130_inv.spice or vim sky130_inv.spice
+* Configure it to the specifications in the below picture:
+[insert image]
+
+**Characterize Inverter using Sky130 Models**
+* Plot the graph for output vs input sweeping the time
+* Use plot y vs time a in ngspice sky130_inv.spice
+
+[insert image]
+
+[insert image of graph]
+
+The results obtained from the graph are :
+* Rise Transition : 0.0395ns
+* Fall transition : 0.0282ns
+* Cell Rise delay : 0.03598ns
+* Cell fall delay : 0.0483ns
+</details>
